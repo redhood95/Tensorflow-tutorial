@@ -95,6 +95,16 @@ with tf.Session() as sess:
 
     for iteration in range(num_iterations):
         print("Currently on Iteration: {} \n".format(iteration) )
+	all_rewards = []
+        all_gradients = []
+
+        # Play n amount of game rounds
+        for game in range(num_game_rounds):
+
+            current_rewards = []
+            current_gradients = []
+
+            observations = env.reset()
 
         
 
