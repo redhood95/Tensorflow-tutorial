@@ -125,8 +125,15 @@ with tf.Session() as sess:
             all_rewards.append(current_rewards)
             all_gradients.append(current_gradients)
 		
-		
-        
+	all_rewards = discount_and_normalize_rewards(all_rewards,discount_rate)
+        feed_dict = {}	
+        for var_index, gradient_placeholder in enumerate(gradient_placeholders):
+            mean_gradients = np.mean([reward * all_gradients[game_index][step][var_index]
+                                      for game_index, rewards in enumerate(all_rewards)
+                                          for step, reward in enumerate(rewards)], axis=0)
+            feed_dict[gradient_placeholder] = mean_gradients
+
+        sess.run(training_op, feed_dict=feed_dict)
 
 
     print('SAVING GRAPH AND SESSION')
