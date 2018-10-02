@@ -51,5 +51,30 @@ training_op = optimizer.apply_gradients(grads_and_vars_feed)
 init = tf.global_variables_initializer()
 saver = tf.train.Saver()
 
+#reward functions
 
+def helper_discount_rewards(rewards, discount_rate):
+    '''
+    Takes in rewards and applies discount rate
+    '''
+    discounted_rewards = np.zeros(len(rewards))
+    cumulative_rewards = 0
+    for step in reversed(range(len(rewards))):
+        cumulative_rewards = rewards[step] + cumulative_rewards * discount_rate
+        discounted_rewards[step] = cumulative_rewards
+    return discounted_rewards
+
+def discount_and_normalize_rewards(all_rewards, discount_rate):
+    '''
+    Takes in all rewards, applies helper_discount function and then normalizes
+    using mean and std.
+    '''
+    all_discounted_rewards = []
+    for rewards in all_rewards:
+        all_discounted_rewards.append(helper_discount_rewards(rewards,discount_rate))
+
+    flat_rewards = np.concatenate(all_discounted_rewards)
+    reward_mean = flat_rewards.mean()
+    reward_std = flat_rewards.std()
+    return [(discounted_rewards - reward_mean)/reward_std for discounted_rewards in all_discounted_rewards]
 
