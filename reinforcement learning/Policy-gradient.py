@@ -100,6 +100,10 @@ with tf.Session() as sess:
 
         # Play n amount of game rounds
         for game in range(num_game_rounds):
+	    current_rewards = []
+            current_gradients = []
+
+            observations = env.reset()
 
             for step in range(max_game_steps):
 
