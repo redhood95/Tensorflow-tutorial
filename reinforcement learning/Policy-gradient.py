@@ -30,4 +30,26 @@ y = 1. - tf.to_float(action)
 cross_entropy = tf.nn.sigmoid_cross_entropy_with_logits(labels=y, logits=logits)
 optimizer = tf.train.AdamOptimizer(learning_rate)
 
+#gradients
+gradients_and_variables = optimizer.compute_gradients(cross_entropy)
+
+
+
+gradients = []
+gradient_placeholders = []
+grads_and_vars_feed = []
+
+for gradient, variable in gradients_and_variables:
+    gradients.append(gradient)
+    gradient_placeholder = tf.placeholder(tf.float32, shape=gradient.get_shape())
+    gradient_placeholders.append(gradient_placeholder)
+    grads_and_vars_feed.append((gradient_placeholder, variable))
+
+
+training_op = optimizer.apply_gradients(grads_and_vars_feed)
+#initializing variables and saving model
+init = tf.global_variables_initializer()
+saver = tf.train.Saver()
+
+
 
