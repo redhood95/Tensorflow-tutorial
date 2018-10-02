@@ -101,11 +101,27 @@ with tf.Session() as sess:
         # Play n amount of game rounds
         for game in range(num_game_rounds):
 
-            current_rewards = []
-            current_gradients = []
+            for step in range(max_game_steps):
 
-            observations = env.reset()
+                # Get Actions and Gradients
+                action_val, gradients_val = sess.run([action, gradients], feed_dict={X: observations.reshape(1, num_inputs)})
 
+                # Perform Action
+                observations, reward, done, info = env.step(action_val[0][0])
+
+                # Get Current Rewards and Gradients
+                current_rewards.append(reward)
+                current_gradients.append(gradients_val)
+
+                if done:
+                    # Game Ended
+                    break
+
+            # Append to list of all rewards
+            all_rewards.append(current_rewards)
+            all_gradients.append(current_gradients)
+		
+		
         
 
 
