@@ -78,3 +78,30 @@ def discount_and_normalize_rewards(all_rewards, discount_rate):
     reward_std = flat_rewards.std()
     return [(discounted_rewards - reward_mean)/reward_std for discounted_rewards in all_discounted_rewards]
 
+
+# training session
+
+env = gym.make("CartPole-v0")
+
+num_game_rounds = 10
+max_game_steps = 1000
+num_iterations = 250
+discount_rate = 0.95
+
+
+with tf.Session() as sess:
+    sess.run(init)
+
+
+    for iteration in range(num_iterations):
+        print("Currently on Iteration: {} \n".format(iteration) )
+
+        
+
+
+    print('SAVING GRAPH AND SESSION')
+    meta_graph_def = tf.train.export_meta_graph(filename='/models/my_tep-model.meta')
+    saver.save(sess, '/models/my_model')
+
+
+
